@@ -1,0 +1,18 @@
+replicaCount: 3
+
+credentials:
+  superuser: tea
+  admin: cola
+  standby: pinacolada
+
+persistentVolume:
+  size: 50G
+
+nodeSelector:
+  type: reserved
+
+tolerations:
+- key: "type"
+  operator: "Equal"
+  value: "reserved"
+  effect: "NoSchedule"
