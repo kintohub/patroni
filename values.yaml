@@ -1,3 +1,11 @@
+#kintohub
+kinto:
+  alias:
+  workspace:
+  envId:
+  blockName:
+  workspaceTier:
+
 replicaCount: 5
 
 image:
@@ -84,10 +92,15 @@ resources: {}
   #   memory: 128Mi
 
 # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
-nodeSelector: {}
+nodeSelector:
+  type: protier-pool
 
 # https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-tolerations: []
+tolerations:
+- key: "type"
+  operator: "Equal"
+  value: "protier-pool"
+  effect: "NoSchedule"
 
 # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 affinity: |

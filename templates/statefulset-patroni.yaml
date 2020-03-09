@@ -8,6 +8,8 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
+  updateStrategy:
+    type: RollingUpdate
   serviceName: {{ template "patroni.fullname" . }}
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -20,6 +22,11 @@ spec:
       labels:
         app: {{ template "patroni.fullname" . }}
         release: {{ .Release.Name }}
+        type: "cs"
+        alias: {{ .Values.kinto.alias }}
+        workspace: {{ .Values.kinto.workspace }}
+        blockName: {{ .Values.kinto.blockName }}
+        envId: {{ .Values.kinto.envId }}
     spec:
       serviceAccountName: {{ template "patroni.serviceAccountName" . }}
       containers:
@@ -133,6 +140,7 @@ spec:
         {{- end }}
         resources:
 {{ toYaml .Values.resources | indent 10 }}
+{{- if eq .Values.kinto.workspaceTier "PRO_TIER" }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
@@ -141,6 +149,7 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}
+{{- end }}
       affinity:
 {{ tpl .Values.affinity . | indent 8 }}
       volumes:
